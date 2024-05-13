@@ -1,8 +1,7 @@
 **Jenkins Pipeline for Java based application using Maven, SonarQube,
 Argo CD, Helm and Kubernetes**
 
-![](./media/image1.png){width="6.268055555555556in"
-height="2.9270833333333335in"}
+![](./media/image1.png)
 
 Installation on EC2 Instance:
 
@@ -12,57 +11,68 @@ Installation on EC2 Instance:
 
 -   Launch instances
 
-![](./media/image2.png){width="6.268055555555556in"
-height="2.8472222222222223in"}
-
+![](./media/image2.png)
 > Install Java:
 
-1.  Update package lists: sudo apt update
+1.  Update package lists:
+ ```console
+ sudo apt update
+ ```
 
-2.  Install OpenJDK 11: sudo apt install openjdk-11-jre
+2.  Install OpenJDK 11: 
+```console
+sudo apt install openjdk-11-jre
+```
 
 3.  Verify Java installation: java -version
 
 > **Install Jenkins:**
 
--   Import Jenkins repository key: curl -fsSL
+-   Import Jenkins repository key: 
+```console
+curl -fsSL
     https://pkg.jenkins.io/debian/jenkins.io-2023.key \| sudo tee
     /usr/share/keyrings/jenkins-keyring.asc \> /dev/null
+```
 
--   Add Jenkins repository: echo deb
+-   Add Jenkins repository: 
+```console
+echo deb
     \[signed-by=/usr/share/keyrings/jenkins-keyring.asc\]
     https://pkg.jenkins.io/debian binary/ \| sudo tee
     /etc/apt/sources.list.d/jenkins.list \> /dev/null
 
--   Update package lists: sudo apt-get update
+```
+-   Update package lists:
+```console
+ sudo apt-get update
+```
 
--   Install Jenkins: sudo apt-get install jenkins
+-   Install Jenkins: 
+```console
+sudo apt-get install jenkins
+```
 
 Note: Ensure inbound traffic rules allow TCP 8080.
 
-![](./media/image3.png){width="6.268055555555556in" height="2.68125in"}
-
+![](./media/image3.png)
 -   Access Jenkins:
 
 -   Login using:
 
-![](./media/image4.png){width="6.268055555555556in"
-height="4.082638888888889in"}
+![](./media/image4.png)
 
 -   Retrieve admin password: sudo cat
     /var/lib/jenkins/secrets/initialAdminPassword
 
-![](./media/image5.png){width="6.268055555555556in"
-height="2.2736111111111112in"}
+![](./media/image5.png)
 
-![](./media/image6.png){width="6.268055555555556in"
-height="3.5284722222222222in"}
+![](./media/image6.png)
 
 **\-\-\-\-\-\-\-\-\-\-\-\--\>create admin
 user\-\-\-\-\-\-\-\-\-\-\--\>**
 
-![](./media/image7.png){width="6.268055555555556in"
-height="3.2118055555555554in"}
+![](./media/image7.png)
 
 **\-\-\-\-\-\-\-\-\-\-\-\--\>[Jenkins Installation is
 Successful]{.mark}.\-\-\-\-\-\-\-\-\-\-\--\>**
@@ -95,11 +105,9 @@ In the pipeline configuration page:
 **Note: Ensure that your Jenkins server has the necessary permissions to
 access the repository.**
 
-v![](./media/image8.png){width="4.6426017060367455in"
-height="2.351648075240595in"}
+v![](./media/image8.png)
 
-![](./media/image9.png){width="5.083845144356955in"
-height="7.862637795275591in"}
+![](./media/image9.png)
 
 In this pipeline we are using docker as agent so for that need to
 install docker pluggin and docker in jenkins server
@@ -120,19 +128,20 @@ install docker pluggin and docker in jenkins server
 
 -   Click Install without restart.
 
-![](./media/image10.png){width="6.268055555555556in"
-height="2.8152777777777778in"}
-
+![](./media/image10.png)
 install docker in jenkins server
 
 **Install Docker:**
+```console
 
 sudo apt update
 
 sudo apt install docker.io
+```
 
 **Grant Permissions:**
 
+```console
 sudo su -
 
 usermod -aG docker jenkins
@@ -140,6 +149,7 @@ usermod -aG docker jenkins
 usermod -aG docker ubuntu
 
 systemctl restart docker
+```
 
 Once you are done with the above steps, it is better to restart Jenkins.
 
@@ -150,14 +160,14 @@ http://\<ec2-instance-public-ip\>:8080/restart
 -   Install SonarQube Scanner Plugin: Jenkins Dashboard -\> Manage
     Jenkins -\> Plugins -\> Install SonarQube Scanner.
 
-![](./media/image11.png){width="6.268055555555556in"
-height="2.551388888888889in"}
+![](./media/image11.png)
 
 **Install and Configure SonarQube Server**
 
-\$apt install unzip
+```console
+$apt install unzip
 
-\$adduser sonarqube
+$adduser sonarqube
 
 su - sonarqube
 
@@ -174,14 +184,14 @@ cd sonarqube-9.4.0.54424/bin/linux-x86-64/
 
 ./sonar.sh start
 
+```
 sonar kube installed it will access in 9000 port
 
 [<https://ec2> instance ip :9000]{.underline}
 
 -   Add 9000 port in EC2 inbond rule
 
-![](./media/image12.png){width="4.886376859142607in"
-height="2.428571741032371in"}
+![](./media/image12.png)
 
 **Connect Jenkins with SonarQube:**
 
@@ -189,11 +199,9 @@ Now we can acess sonarqkube url
 
 Default User name and password is admin \-\-- admin
 
-![](./media/image13.png){width="5.1208792650918635in"
-height="2.86283573928259in"}
+![](./media/image13.png)
 
-![](./media/image14.png){width="4.664834864391951in"
-height="2.6819444444444445in"}
+![](./media/image14.png)
 
 **Connect SonarQube with Jenkins:**
 
@@ -213,8 +221,7 @@ height="2.6819444444444445in"}
 
 -   Copy the generated token.
 
-![](./media/image15.png){width="4.8736264216972875in"
-height="2.9604166666666667in"}
+![](./media/image15.png)
 
 > Add API Token to Jenkins Credentials:
 
@@ -236,9 +243,7 @@ height="2.9604166666666667in"}
 
 -   Click OK to save the credentials.
 
-![](./media/image16.png){width="5.225274496937883in"
-height="2.607638888888889in"}
-
+![](./media/image16.png)
 [Continuous Integration (CI) Setup Complete]{.mark}.
 
 **Continuous Deployment (CD) Setup:**
@@ -249,60 +254,86 @@ height="2.607638888888889in"}
 
 **Update package lists:**
 
+```console
 sudo apt-get update
+```
 
 **Install Docker:**
 
+```console
 sudo apt-get install docker.io -y
 
 sudo usermod -aG docker \$USER && newgrp docker
 
+```
 **Update system packages and install MiniKube dependencies:**
 
+```console
 sudo apt update && sudo apt upgrade
 
 sudo apt install -y curl wget apt-transport-https
+```
 
 **Download the latest MiniKube release:**
 
+```console
 curl -LO
 https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 
+```
 **Install MiniKube:**
 
+```console
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
 
 **Verify the installation by checking the MiniKube version:**
+```console
 
 minikube version
+```
 
 **You should see an output similar to:**
 
+
+```console
 minikube version: v1.32.0
+```
+
 
 commit: 8220a6eb95f0a4d75f7f2d7b14cef975f050512d
 
 **Download kubectl:**
 
+```console
 curl -LO
 https://storage.googleapis.com/kubernetes-release/release/\$(curl -s
 https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+```
 
 **Make kubectl executable:**
 
+```console
 chmod +x kubectl
+```
 
 **Move kubectl to /usr/local/bin to make it available system-wide:**
 
+```console
 sudo mv kubectl /usr/local/bin/
+```
 
 **Check the kubectl version:**
 
+```console
 kubectl version -o yaml
+```
 
 **Start MiniKube with Docker driver:**
 
+```console
 minikube start \--driver=docker \--force
+```
 
 **Check the status of MiniKube:**
 
@@ -323,11 +354,14 @@ kubeconfig: Configured
 **Setup Argo CD:**
 
 -   Install Operator Lifecycle Manager (OLM).
+```console
 
 curl -sL
 [[https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh]{.underline}](https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.27.0/install.sh)
 \| bash -s v0.27.0
 
+```
+```console
 • Install Argo CD Operator.
 
 \$ kubectl create -f
@@ -335,6 +369,7 @@ curl -sL
 
 \$ kubectl get csv -n operators
 
+```
 -   Deploy Argo CD controller.
 
 -   Access Argo CD UI using generated credentials.
@@ -365,33 +400,33 @@ Check the status of the Argo CD pods:
 
 \$kubectl get pod
 
-![](./media/image17.png){width="6.268055555555556in"
-height="0.9701388888888889in"}
+![](./media/image17.png)
 
 Check the services to get the URL for accessing Argo CD:
 
 \$kubectl get svc
 
-![](./media/image18.png){width="6.268055555555556in"
-height="0.8956047681539807in"}
+![](./media/image18.png)
 
 Edit the service to change the cluster IP to node port for browser
 access:
 
-\$kubectl edit svc example-argocd-server
+```console
+$kubectl edit svc example-argocd-server
+```
 
-![](./media/image19.png){width="4.8284722222222225in"
-height="2.5989009186351706in"}
+![](./media/image19.png)
 
 > Access Argo CD UI:
 
 Use port-forwarding to access the Argo CD UI:
 
-\$kubectl port-forward svc/example-argocd-server -n default \--address
+```console
+$kubectl port-forward svc/example-argocd-server -n default \--address
 0.0.0.0 8080:443
+```
 
-![](./media/image20.png){width="6.268055555555556in"
-height="0.8923611111111112in"}
+![](./media/image20.png)
 
 Use the following credentials to login:
 
@@ -401,17 +436,11 @@ Use the following credentials to login:
 
 echo dlAzcDBaeFJmWUw4RGFuaEd1U0pGYjlYano1Z1dIY3M= \| base64 -d
 
-![](./media/image21.png){width="6.268055555555556in"
-height="1.1743055555555555in"}
+![](./media/image21.png)
 
-![](./media/image22.png){width="4.856944444444444in"
-height="2.428571741032371in"}
-
-![](./media/image23.png){width="6.268055555555556in"
-height="0.34305555555555556in"}
-
-![](./media/image24.png){width="6.268055555555556in"
-height="2.220138888888889in"}
+![](./media/image22.png)
+![](./media/image23.png)
+![](./media/image24.png)
 
 Add Docker Hub and GitHub Credentials in Jenkins:
 
@@ -435,8 +464,7 @@ Add Docker Hub and GitHub Credentials in Jenkins:
 
 -   Click OK to save the credentials.
 
-![](./media/image25.png){width="6.268055555555556in"
-height="2.021978346456693in"}
+![](./media/image25.png)
 
 > GitHub Credentials:
 
@@ -448,8 +476,7 @@ height="2.021978346456693in"}
 
 -   Click OK to save the credentials.
 
-![](./media/image26.png){width="6.268055555555556in"
-height="1.8516480752405948in"}
+![](./media/image26.png)
 
 **Build Pipeline:**
 
@@ -469,8 +496,7 @@ height="1.8516480752405948in"}
 -   Upon successful completion, you should see \"Build Success\" in the
     build history.
 
-![](./media/image27.png){width="6.268055555555556in"
-height="2.0659339457567802in"}
+![](./media/image27.png)
 
 **[Build
 Success\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\.....]{.mark}**
@@ -485,11 +511,9 @@ Success\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\...\
 -   If everything looks good, proceed with further deployment steps as
     per your pipeline configuration.
 
-![](./media/image28.png){width="6.268055555555556in"
-height="1.9791666666666667in"}
+![](./media/image28.png)
 
-![](./media/image29.png){width="6.268055555555556in"
-height="2.8652777777777776in"}
+![](./media/image29.png)
 
 **Deploy Application to Minikube Cluster using Argo CD:**
 
@@ -508,11 +532,8 @@ height="2.8652777777777776in"}
 
 -   Click on Create to add the application.
 
-![](./media/image30.png){width="6.268055555555556in"
-height="3.661111111111111in"}
-
-![](./media/image31.png){width="6.268055555555556in"
-height="3.915277777777778in"}
+![](./media/image30.png)
+![](./media/image31.png)
 
 > **Trigger Synchronization:**
 
@@ -522,8 +543,7 @@ height="3.915277777777778in"}
 -   You can also manually trigger synchronization by clicking on the
     Sync button next to the application.
 
-![](./media/image32.png){width="6.268055555555556in"
-height="3.377083333333333in"}
+![](./media/image32.png)
 
 > Monitor Deployment:
 
@@ -531,11 +551,9 @@ height="3.377083333333333in"}
 
 -   Wait for the application to be deployed successfully.
 
-![](./media/image33.png){width="6.268055555555556in"
-height="1.8395833333333333in"}
+![](./media/image33.png)
 
-![](./media/image34.png){width="6.268055555555556in"
-height="2.3243055555555556in"}
+![](./media/image34.png)
 
 **Access Application:**
 
@@ -546,8 +564,7 @@ height="2.3243055555555556in"}
 
 \$kubectl get svc
 
-![](./media/image35.png){width="6.268055555555556in"
-height="1.1340277777777779in"}
+![](./media/image35.png)
 
 kubectl port-forward \--address 0.0.0.0 svc/\<service-name\> 8080:80
 
@@ -559,7 +576,6 @@ Replace \<service-name\> with the name of your service.
 [**Now we can able to access in
 browser**\...\...\...\...\...\...\...\...\...\...\...]{.mark}
 
-![](./media/image36.png){width="6.268055555555556in"
-height="2.3027777777777776in"}
+![](./media/image36.png)
 
 **THANK You......**
